@@ -146,9 +146,6 @@ void exec(const std::vector<std::string>& commands) {
         else {
             foreground(arr);
         }
-
-
-
     }
 }
 
