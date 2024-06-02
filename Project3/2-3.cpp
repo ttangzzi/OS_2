@@ -7,7 +7,9 @@
 #include <thread>
 #include <mutex>
 
-std::mutex print_mutex;
+using namespace std;
+using namespace chrono;
+mutex print_mutex;
 int pid;
 
 // 공백을 제거하는 함수
@@ -87,6 +89,7 @@ int sum(int n)
     return sum % 1000000;
 }
 
+/* 명령어에 맞는 출력 */
 void print_command(const std::vector<std::string>& arr) {
     if (arr[0] == "echo" || arr[0] == "&echo") {
         std::cout << arr[1] << "\n";
@@ -114,16 +117,73 @@ void print_command(const std::vector<std::string>& arr) {
 
 // Foreground 작업으로 실행될 함수
 void foreground(const std::vector<std::string>& arr) {
-    std::lock_guard<std::mutex> lock(print_mutex);
-    pid++;
-    print_command(arr);
+    int p = 0, d = 200, n = 1;
+    for (int i = 0; i < size(arr); i++) {
+        // 예외처리 : i가 arr의 크기 -1 보다 작을때만 되도록 (i+1 때 오버플로 방지)
+        if (i < size(arr) - 1) {
+            if (arr[i] == "-p") {
+                p = stoi(arr[i + 1]);
+            }
+            else if (arr[i] == "-d") {
+                d = stoi(arr[i + 1]);
+            }
+            else if (arr[i] == "-n") {
+                n = stoi(arr[i + 1]);
+            }
+        }
+    }
+    auto start = steady_clock::now(); // 시작 시간 기록
+    auto end = start + seconds(d);   // 종료 시간 설정
+
+    for (int j = 0; j < n; j++) {
+        if (steady_clock::now() >= end) { // 현재 시간이 종료 시간보다 이전인 동안 반복
+            break;
+        }
+        std::this_thread::sleep_for(seconds(p)); // p초 동안 대기
+        {
+            std::lock_guard<std::mutex> lock(print_mutex);
+            pid++;
+            print_command(arr);
+        }
+    }
 }
 
 // Background 작업으로 실행될 함수
 void background(const std::vector<std::string>& arr) {
-    std::lock_guard<std::mutex> lock(print_mutex);
-    pid++;
-    print_command(arr);
+    int p = 0, d = 200, n = 1;
+    for (int i = 0; i < size(arr); i++) {
+        // 예외처리 : i가 arr의 크기 -1 보다 작을때만 되도록 (i+1 때 오버플로 방지)
+        if (i < size(arr) - 1) {
+            if (arr[i] == "-p") {
+                p = stoi(arr[i + 1]);
+            }
+            else if (arr[i] == "-d") {
+                d = stoi(arr[i + 1]);
+            }
+            else if (arr[i] == "-n") {
+                n = stoi(arr[i + 1]);
+            }
+            else if ((arr[0] == "sum" || arr[0] == "&sum") && arr[i] == "-m") {
+
+            }
+        }
+    }
+    auto start = steady_clock::now(); // 시작 시간 기록
+    auto end = start + seconds(d);   // 종료 시간 설정
+
+    for (int j = 0; j < n; j++) {
+        if (steady_clock::now() >= end) { // 현재 시간이 종료 시간보다 이전인 동안 반복
+            break;
+        }
+        std::this_thread::sleep_for(seconds(p)); // p초 동안 대기
+
+        /* 해당 부분만 lock을 해야 전체대기를 막을 수 있다 */
+        {
+            std::lock_guard<std::mutex> lock(print_mutex);
+            pid++;
+            print_command(arr);
+        }
+    }
 }
 
 // 명령어를 실행하는 함수
@@ -137,7 +197,6 @@ void exec(const std::vector<std::string>& commands) {
             arr.push_back(token);
         }
 
-        // BG와 FG 구분하기, BG일때 &를 붙이므로 명령어 평가를 위해 제거해줌
         if ((arr.front()).front() == '&') {
             std::thread bgThread(background, arr);
             // join을 하면 독립 시행이 아니므로 detach한다.
@@ -150,7 +209,7 @@ void exec(const std::vector<std::string>& commands) {
 }
 
 int main() {
-    std::string command = "gcd 78696 19332 ; sum 100000; echo ghi -p 2;";
+    std::string command = "&gcd 78696 19332 -p 12; sum 100000 -p 10 -n 2; echo ghi;";
     auto commands = parse(command);
     // commands 출력
     for (const auto& cmd : commands) {
