@@ -13,6 +13,7 @@ using namespace std;
 using namespace chrono;
 mutex print_mutex;
 int pid;
+int m = 0;
 
 /* 공백을 제거하는 함수 */
 void trim(string& str) {
@@ -94,26 +95,55 @@ int sum(int n)
 /* 명령어에 맞는 출력 */
 void print_command(const std::vector<std::string>& arr) {
     if (arr[0] == "echo" || arr[0] == "&echo") {
-        std::cout << arr[1] << "\n";
+        cout << arr[1] << "\n";
     }
     else if (arr[0] == "dummy" || arr[0] == "&dummy") {
 
     }
     else if (arr[0] == "gcd" || arr[0] == "&gcd") {
-        int x = std::stoi(arr[1]);
-        int y = std::stoi(arr[2]);
-        std::cout << gcd(x, y) << "\n";
+        int x = stoi(arr[1]);
+        int y = stoi(arr[2]);
+        cout << gcd(x, y) << "\n";
     }
     else if (arr[0] == "prime" || arr[0] == "&prime") {
-        int x = std::stoi(arr[1]);
-        std::cout << Eratos(x) << "\n";
+        int x = stoi(arr[1]);
+        cout << Eratos(x) << "\n";
     }
     else if (arr[0] == "sum" || arr[0] == "&sum") {
-        int x = std::stoi(arr[1]);
-        std::cout << sum(x) << "\n";
+        int x = stoi(arr[1]);
+
+        vector<thread> threads;
+        vector<int> results(m); // 결과를 저장할 벡터
+
+        if (m > 1) {
+            for (int i = 0; i < m; i++) {
+                threads.emplace_back([&, i]() {
+                    results[i] = sum(x);
+                    });
+            }
+
+            for (thread& t : threads) {
+                t.join();
+            }
+
+            for (int i = 0; i < m; i++) {
+                if (i != m - 1) {
+                    cout << "Thread " << i+1 << " : " << results[i] << " / ";
+                }
+                else {
+                    cout << "Thread " << i+1 << " : " <<results[i];
+                }
+                
+            }
+            cout << endl;
+        }
+        else {
+            cout << sum(x) << endl;
+        }
+        
     }
     else {
-        std::cout << "error\n";
+        cout << "error\n";
     }
 }
 
@@ -122,6 +152,7 @@ void ground(const std::vector<std::string>& arr) {
 
     // 기본값 설정 > p = 0초마다 반복 / d = 200초 넘으면 종료 / n = 1개 생성
     int p = 0, d = 200, n = 1;
+    m = 0;
 
     for (int i = 0; i < size(arr); i++) {
         // 예외처리 : i가 arr의 크기 -1 보다 작을때만 되도록 (i+1 때 오버플로 방지)
@@ -136,7 +167,7 @@ void ground(const std::vector<std::string>& arr) {
                 n = stoi(arr[i + 1]);
             }
             else if ((arr[0] == "sum" || arr[0] == "&sum") && arr[i] == "-m") {
-
+                m = stoi(arr[i + 1]);
             }
         }
     }
@@ -164,7 +195,7 @@ void exec(const vector<string>& commands) {
     for (const auto& command : commands) {
         std::stringstream ss(command);
         std::string token;
-        std::vector<std::string> arr;
+        std::vector<string> arr;
 
 
         // 명령어들을 동적배열에 할당한다.
@@ -173,7 +204,7 @@ void exec(const vector<string>& commands) {
         }
 
         if ((arr.front()).front() == '&') {
-            std::thread bgThread(ground, arr);
+            thread bgThread(ground, arr);
             // join을 하면 독립 시행이 아니므로 detach한다.
             bgThread.detach();
         }
@@ -215,12 +246,10 @@ int main() {
     else {
         /* 한 줄 단위로 실행하기 */
         while (getline(file, command)) {
+            cout << "prompt> " << command << endl;
             parseCommands = parse(command);
-            for (const auto& cmd : parseCommands) {
-                std::cout << cmd << std::endl;
-            }
             exec(parseCommands);
-            std::this_thread::sleep_for(seconds(5)); // 몇 초정도 기다리기
+            // this_thread::sleep_for(seconds(5)); // Y 초 Sleep
         }
     }
     file.close();
