@@ -1,0 +1,3 @@
+echo abc -n 2 -p 10  ; &echo aaa ; echo aww; gcd 1222 4444;
+echo aab;
+sum 10000 -n 4;

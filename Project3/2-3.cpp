@@ -6,18 +6,20 @@
 #include <cctype>
 #include <thread>
 #include <mutex>
+#include <windows.h>
+#include <fstream>
 
 using namespace std;
 using namespace chrono;
 mutex print_mutex;
 int pid;
 
-// 공백을 제거하는 함수
-void trim(std::string& str) {
+/* 공백을 제거하는 함수 */
+void trim(string& str) {
     auto start = str.find_first_not_of(" \t\n\r\f\v");
     auto end = str.find_last_not_of(" \t\n\r\f\v");
 
-    if (start == std::string::npos) {
+    if (start == string::npos) {
         str = ""; // 문자열이 공백만 있는 경우
     }
     else {
@@ -25,13 +27,13 @@ void trim(std::string& str) {
     }
 }
 
-// 명령어를 파싱하는 함수
-std::vector<std::string> parse(const std::string& command) {
-    std::vector<std::string> tokens;
-    std::stringstream ss(command);
-    std::string item;
+/* 명령어를 파싱하는 함수 (;) */
+std::vector<string> parse(const std::string& command) {
+    vector<string> tokens;
+    stringstream ss(command);
+    string item;
 
-    while (std::getline(ss, item, ';')) {
+    while (getline(ss, item, ';')) {
         trim(item);
         if (!item.empty()) {
             tokens.push_back(item);
@@ -54,7 +56,7 @@ int gcd(int a, int b)
     return a;
 }
 
-/* ~체 알고리즘 */
+/* 에라토스테네스의 체 알고리즘 */
 int Eratos(int n) {
     std::vector<bool> isPrime(n + 1, true);
     int count = 0;
@@ -150,7 +152,10 @@ void foreground(const std::vector<std::string>& arr) {
 
 // Background 작업으로 실행될 함수
 void background(const std::vector<std::string>& arr) {
+
+    // 기본값 설정 > p = 0초마다 반복 / d = 200초 넘으면 종료 / n = 1개 생성
     int p = 0, d = 200, n = 1;
+
     for (int i = 0; i < size(arr); i++) {
         // 예외처리 : i가 arr의 크기 -1 보다 작을때만 되도록 (i+1 때 오버플로 방지)
         if (i < size(arr) - 1) {
@@ -186,13 +191,16 @@ void background(const std::vector<std::string>& arr) {
     }
 }
 
-// 명령어를 실행하는 함수
-void exec(const std::vector<std::string>& commands) {
+/* 명령어를 실행하는 함수 */
+void exec(const vector<string>& commands) {
+
     for (const auto& command : commands) {
         std::stringstream ss(command);
         std::string token;
         std::vector<std::string> arr;
 
+
+        // 명령어들을 동적배열에 할당한다.
         while (ss >> token) {
             arr.push_back(token);
         }
@@ -202,21 +210,53 @@ void exec(const std::vector<std::string>& commands) {
             // join을 하면 독립 시행이 아니므로 detach한다.
             bgThread.detach();
         }
-        else {
-            foreground(arr);
+    }
+
+
+    for (const auto& command : commands) {
+        std::stringstream ss(command);
+        std::string token;
+        std::vector<std::string> arr;
+
+
+        // 명령어들을 동적배열에 할당한다.
+        while (ss >> token) {
+            arr.push_back(token);
         }
+
+        if ((arr.front()).front() != '&') {
+            foreground(arr);
+        }   
     }
 }
 
 int main() {
-    std::string command = "&gcd 78696 19332 -p 12; sum 100000 -p 10 -n 2; echo ghi;";
-    auto commands = parse(command);
-    // commands 출력
-    for (const auto& cmd : commands) {
-        std::cout << cmd << std::endl;
-    }
-    exec(commands);
+    char buffer[MAX_PATH];
+    GetModuleFileNameA(NULL, buffer, MAX_PATH);
+    string::size_type pos = string(buffer).find_last_of("\\/");
+    string currentDirectory = string(buffer).substr(0, pos);
+    //cout << "Current working directory: " << currentDirectory << endl;
 
-    std::this_thread::sleep_for(std::chrono::seconds(1));
+    ifstream file(currentDirectory + "\\commands.txt");
+    string command;
+    vector<string> parseCommands;
+
+    if (!file.is_open()) {
+        cout << "File not found" << endl;
+        return 1;
+    }
+    else {
+        /* 한 줄 단위로 실행하기 */
+        while (getline(file, command)) {
+            parseCommands = parse(command);
+            for (const auto& cmd : parseCommands) {
+                std::cout << cmd << std::endl;
+            }
+            exec(parseCommands);
+            std::this_thread::sleep_for(seconds(5));
+        }
+    }
+    file.close();
+    
     return 0;
 }
