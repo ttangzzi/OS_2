@@ -117,41 +117,8 @@ void print_command(const std::vector<std::string>& arr) {
     }
 }
 
-// Foreground 작업으로 실행될 함수
-void foreground(const std::vector<std::string>& arr) {
-    int p = 0, d = 200, n = 1;
-    for (int i = 0; i < size(arr); i++) {
-        // 예외처리 : i가 arr의 크기 -1 보다 작을때만 되도록 (i+1 때 오버플로 방지)
-        if (i < size(arr) - 1) {
-            if (arr[i] == "-p") {
-                p = stoi(arr[i + 1]);
-            }
-            else if (arr[i] == "-d") {
-                d = stoi(arr[i + 1]);
-            }
-            else if (arr[i] == "-n") {
-                n = stoi(arr[i + 1]);
-            }
-        }
-    }
-    auto start = steady_clock::now(); // 시작 시간 기록
-    auto end = start + seconds(d);   // 종료 시간 설정
-
-    for (int j = 0; j < n; j++) {
-        if (steady_clock::now() >= end) { // 현재 시간이 종료 시간보다 이전인 동안 반복
-            break;
-        }
-        std::this_thread::sleep_for(seconds(p)); // p초 동안 대기
-        {
-            std::lock_guard<std::mutex> lock(print_mutex);
-            pid++;
-            print_command(arr);
-        }
-    }
-}
-
-// Background 작업으로 실행될 함수
-void background(const std::vector<std::string>& arr) {
+/* thread 구분하면 BG, 구분하지 않으면 FG */
+void ground(const std::vector<std::string>& arr) {
 
     // 기본값 설정 > p = 0초마다 반복 / d = 200초 넘으면 종료 / n = 1개 생성
     int p = 0, d = 200, n = 1;
@@ -206,7 +173,7 @@ void exec(const vector<string>& commands) {
         }
 
         if ((arr.front()).front() == '&') {
-            std::thread bgThread(background, arr);
+            std::thread bgThread(ground, arr);
             // join을 하면 독립 시행이 아니므로 detach한다.
             bgThread.detach();
         }
@@ -225,7 +192,7 @@ void exec(const vector<string>& commands) {
         }
 
         if ((arr.front()).front() != '&') {
-            foreground(arr);
+            ground(arr);
         }   
     }
 }
@@ -253,7 +220,7 @@ int main() {
                 std::cout << cmd << std::endl;
             }
             exec(parseCommands);
-            std::this_thread::sleep_for(seconds(5));
+            std::this_thread::sleep_for(seconds(5)); // 몇 초정도 기다리기
         }
     }
     file.close();
