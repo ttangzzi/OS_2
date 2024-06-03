@@ -128,6 +128,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="2-3.cpp" />
+    <ClCompile Include="FileName.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="commands.txt" />

@@ -12,7 +12,13 @@
 using namespace std;
 using namespace chrono;
 mutex print_mutex;
-int pid;
+
+struct Process {
+    int pid;
+    char suffix; // suffix : 접미사
+};
+Process pd;
+
 int m = 0;
 
 /* 공백을 제거하는 함수 */
@@ -29,7 +35,7 @@ void trim(string& str) {
 }
 
 /* 명령어를 파싱하는 함수 (;) */
-std::vector<string> parse(const std::string& command) {
+vector<string> parse(const string& command) {
     vector<string> tokens;
     stringstream ss(command);
     string item;
@@ -59,7 +65,7 @@ int gcd(int a, int b)
 
 /* 에라토스테네스의 체 알고리즘 */
 int Eratos(int n) {
-    std::vector<bool> isPrime(n + 1, true);
+    vector<bool> isPrime(n + 1, true);
     int count = 0;
 
     if (n >= 0) isPrime[0] = false;
@@ -93,7 +99,7 @@ int sum(int n)
 }
 
 /* 명령어에 맞는 출력 */
-void print_command(const std::vector<std::string>& arr) {
+void print_command(const vector<string>& arr) {
     if (arr[0] == "echo" || arr[0] == "&echo") {
         cout << arr[1] << "\n";
     }
@@ -148,7 +154,7 @@ void print_command(const std::vector<std::string>& arr) {
 }
 
 /* thread 구분하면 BG, 구분하지 않으면 FG */
-void ground(const std::vector<std::string>& arr) {
+void ground(const vector<string>& arr, char suffix) {
 
     // 기본값 설정 > p = 0초마다 반복 / d = 200초 넘으면 종료 / n = 1개 생성
     int p = 0, d = 200, n = 1;
@@ -178,12 +184,13 @@ void ground(const std::vector<std::string>& arr) {
         if (steady_clock::now() >= end) { // 현재 시간이 종료 시간보다 이전인 동안 반복
             break;
         }
-        std::this_thread::sleep_for(seconds(p)); // p초 동안 대기
+        this_thread::sleep_for(seconds(p)); // p초 동안 대기
 
         /* 해당 부분만 lock을 해야 전체대기를 막을 수 있다 */
         {
-            std::lock_guard<std::mutex> lock(print_mutex);
-            pid++;
+            lock_guard<mutex> lock(print_mutex);
+            pd.pid++;
+            pd.suffix = suffix;
             print_command(arr);
         }
     }
@@ -193,9 +200,9 @@ void ground(const std::vector<std::string>& arr) {
 void exec(const vector<string>& commands) {
 
     for (const auto& command : commands) {
-        std::stringstream ss(command);
-        std::string token;
-        std::vector<string> arr;
+        stringstream ss(command);
+        string token;
+        vector<string> arr;
 
 
         // 명령어들을 동적배열에 할당한다.
@@ -204,7 +211,7 @@ void exec(const vector<string>& commands) {
         }
 
         if ((arr.front()).front() == '&') {
-            thread bgThread(ground, arr);
+            thread bgThread(ground, arr, 'B');
             // join을 하면 독립 시행이 아니므로 detach한다.
             bgThread.detach();
         }
@@ -212,9 +219,9 @@ void exec(const vector<string>& commands) {
 
 
     for (const auto& command : commands) {
-        std::stringstream ss(command);
-        std::string token;
-        std::vector<std::string> arr;
+        stringstream ss(command);
+        string token;
+        vector<string> arr;
 
 
         // 명령어들을 동적배열에 할당한다.
@@ -223,7 +230,7 @@ void exec(const vector<string>& commands) {
         }
 
         if ((arr.front()).front() != '&') {
-            ground(arr);
+            ground(arr, 'F');
         }   
     }
 }
