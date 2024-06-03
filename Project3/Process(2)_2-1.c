@@ -1,19 +1,19 @@
 //#include <stdio.h>
 //#include <stdlib.h>
 //
-//// 프로세스 노드 구조체 정의
+///* 프로세스 노드 구조체 */
 //typedef struct ProcessNode {
 //    int data;
 //    struct ProcessNode* next;
 //} ProcessNode;
 //
-//// 스택 노드 구조체 정의
+///* 스택 노드 구조체 */
 //typedef struct StackNode {
 //    ProcessNode* processList;
 //    struct StackNode* next;
 //} StackNode;
 //
-//// 새로운 프로세스 노드를 생성하고 리스트에 추가
+///* 1. enqueue 구현하기 */
 //void enqueue(ProcessNode** head, int data) {
 //    ProcessNode* newNode = (ProcessNode*)malloc(sizeof(ProcessNode));
 //    newNode->data = data;
@@ -31,7 +31,7 @@
 //    }
 //}
 //
-//// 새로운 스택 노드를 생성하고 스택에 추가
+///* 새로운 스택 노드를 생성하고 스택에 추가 */
 //void push(StackNode** top, ProcessNode* processList) {
 //    StackNode* newNode = (StackNode*)malloc(sizeof(StackNode));
 //    newNode->processList = processList;
@@ -39,20 +39,20 @@
 //    *top = newNode;
 //}
 //
-//// 스택의 맨 위 노드를 제거하고 해당 노드의 프로세스 리스트를 반환
+///* 스택의 맨 위 노드를 제거 */
 //ProcessNode* pop(StackNode** top) {
 //    if (*top == NULL) {
-//        printf("스택이 비어 있습니다.\n");
+//        printf("Stack is empty.\n");
 //        return NULL;
 //    }
 //    StackNode* temp = *top;
 //    ProcessNode* processList = temp->processList;
 //    *top = (*top)->next;
 //    free(temp);
-//    return processList;
+//    return processList; // 프로세스 리스트 return
 //}
 //
-//// 프로세스 리스트 출력
+///* 프로세스 리스트 출력 */ 
 //void printProcessList(ProcessNode* head) {
 //    ProcessNode* current = head;
 //    while (current != NULL) {
@@ -62,17 +62,17 @@
 //    printf("NULL\n");
 //}
 //
-//// 스택 출력
+///* 스택 출력 */
 //void printStack(StackNode* top) {
 //    StackNode* current = top;
 //    while (current != NULL) {
-//        printf("스택 노드의 프로세스 리스트: ");
+//        printf("List of Stack Node: ");
 //        printProcessList(current->processList);
 //        current = current->next;
 //    }
 //}
 //
-//// 프로세스 리스트 메모리 해제
+///* 프로세스 리스트 메모리 해제 */
 //void freeProcessList(ProcessNode* head) {
 //    ProcessNode* current = head;
 //    while (current != NULL) {
@@ -82,7 +82,7 @@
 //    }
 //}
 //
-//// 스택 메모리 해제
+///* 스택 메모리 해제 */
 //void freeStack(StackNode* top) {
 //    StackNode* current = top;
 //    while (current != NULL) {
@@ -93,15 +93,16 @@
 //    }
 //}
 //
+///* 2. dequeue 구현하기 */
 //void dequeue(StackNode** top) {
 //    if (*top == NULL) {
-//        printf("스택이 비어 있습니다.\n");
+//        printf("Stack is empty.\n");
 //        return;
 //    }
 //    // top 스택 노드의 프로세스 리스트의 첫 번째 노드
 //    ProcessNode* head = (*top)->processList;
 //    if (head == NULL) {
-//        printf("프로세스 리스트가 비어 있습니다.\n");
+//        printf("Process List is empty.\n");
 //        return;
 //    }
 //    // 첫 번째 노드 삭제
@@ -117,9 +118,10 @@
 //    }
 //}
 //
+///* 3. promote 구현하기 */
 //void promote(StackNode** top, StackNode* P) {
 //    if (P == NULL || *top == NULL || P->processList == NULL) {
-//        printf("Promotion을 수행할 수 없습니다.\n");
+//        printf("Impossible Promote.\n");
 //        return;
 //    }
 //
@@ -177,7 +179,7 @@
 //    }
 //}
 //
-//// 프로세스 리스트의 길이를 반환하는 함수
+///* 프로세스 리스트의 길이 */
 //int processListLength(ProcessNode* head) {
 //    int count = 0;
 //    ProcessNode* current = head;
@@ -188,7 +190,7 @@
 //    return count;
 //}
 //
-//// 스택의 노드 수를 반환하는 함수
+///* 스택의 노드 수 */
 //int stackNodeCount(StackNode* top) {
 //    int count = 0;
 //    StackNode* current = top;
@@ -199,18 +201,7 @@
 //    return count;
 //}
 //
-//// 전체 프로세스의 개수를 반환하는 함수
-//int totalProcessCount(StackNode* top) {
-//    int total = 0;
-//    StackNode* current = top;
-//    while (current != NULL) {
-//        total += processListLength(current->processList);
-//        current = current->next;
-//    }
-//    return total;
-//}
 //
-//// 메인 함수
 //int main() {
 //    StackNode* stack = NULL;
 //
@@ -233,18 +224,18 @@
 //    enqueue(&processList3, 7);
 //    push(&stack, processList3);
 //
-//    // 스택 출력
-//    printf("초기 스택 상태:\n");
+//    // 초기 스택 출력
+//    printf("First stack state: \n");
 //    printStack(stack);
 //
 //    // dequeue 함수 호출
-//    printf("\nDispatch 프로세스 실행 후:\n");
+//    printf("\nAfter running dequeue : \n");
 //    dequeue(&stack);
 //    printStack(stack);
 //
 //    // promote 함수 호출 예시
-//    // 여기서는 P를 두 번째 스택 노드로 설정하여 promote
-//    printf("\nPromote 실행 후:\n");
+//    // P를 두 번째 스택 노드로 설정
+//    printf("\nAfter running Promote: \n");
 //    promote(&stack, stack->next);
 //    printStack(stack);
 //
