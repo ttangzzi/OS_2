@@ -1,19 +1,19 @@
 //#include <stdio.h>
 //#include <stdlib.h>
 //
-//// ÇÁ·Î¼¼½º ³ëµå ±¸Á¶Ã¼ Á¤ÀÇ
+//// í”„ë¡œì„¸ìŠ¤ ë…¸ë“œ êµ¬ì¡°ì²´ ì •ì˜
 //typedef struct ProcessNode {
 //    int data;
 //    struct ProcessNode* next;
 //} ProcessNode;
 //
-//// ½ºÅÃ ³ëµå ±¸Á¶Ã¼ Á¤ÀÇ
+//// ìŠ¤íƒ ë…¸ë“œ êµ¬ì¡°ì²´ ì •ì˜
 //typedef struct StackNode {
 //    ProcessNode* processList;
 //    struct StackNode* next;
 //} StackNode;
 //
-//// »õ·Î¿î ÇÁ·Î¼¼½º ³ëµå¸¦ »ı¼ºÇÏ°í ¸®½ºÆ®¿¡ Ãß°¡ (¸®½ºÆ®ÀÇ ³¡¿¡ »ğÀÔ)
+//// ìƒˆë¡œìš´ í”„ë¡œì„¸ìŠ¤ ë…¸ë“œë¥¼ ìƒì„±í•˜ê³  ë¦¬ìŠ¤íŠ¸ì— ì¶”ê°€
 //void enqueue(ProcessNode** head, int data) {
 //    ProcessNode* newNode = (ProcessNode*)malloc(sizeof(ProcessNode));
 //    newNode->data = data;
@@ -31,7 +31,7 @@
 //    }
 //}
 //
-//// »õ·Î¿î ½ºÅÃ ³ëµå¸¦ »ı¼ºÇÏ°í ½ºÅÃ¿¡ Ãß°¡
+//// ìƒˆë¡œìš´ ìŠ¤íƒ ë…¸ë“œë¥¼ ìƒì„±í•˜ê³  ìŠ¤íƒì— ì¶”ê°€
 //void push(StackNode** top, ProcessNode* processList) {
 //    StackNode* newNode = (StackNode*)malloc(sizeof(StackNode));
 //    newNode->processList = processList;
@@ -39,10 +39,10 @@
 //    *top = newNode;
 //}
 //
-//// ½ºÅÃÀÇ ¸Ç À§ ³ëµå¸¦ Á¦°ÅÇÏ°í ÇØ´ç ³ëµåÀÇ ÇÁ·Î¼¼½º ¸®½ºÆ®¸¦ ¹İÈ¯
+//// ìŠ¤íƒì˜ ë§¨ ìœ„ ë…¸ë“œë¥¼ ì œê±°í•˜ê³  í•´ë‹¹ ë…¸ë“œì˜ í”„ë¡œì„¸ìŠ¤ ë¦¬ìŠ¤íŠ¸ë¥¼ ë°˜í™˜
 //ProcessNode* pop(StackNode** top) {
 //    if (*top == NULL) {
-//        printf("½ºÅÃÀÌ ºñ¾î ÀÖ½À´Ï´Ù.\n");
+//        printf("ìŠ¤íƒì´ ë¹„ì–´ ìˆìŠµë‹ˆë‹¤.\n");
 //        return NULL;
 //    }
 //    StackNode* temp = *top;
@@ -52,7 +52,7 @@
 //    return processList;
 //}
 //
-//// ÇÁ·Î¼¼½º ¸®½ºÆ® Ãâ·Â
+//// í”„ë¡œì„¸ìŠ¤ ë¦¬ìŠ¤íŠ¸ ì¶œë ¥
 //void printProcessList(ProcessNode* head) {
 //    ProcessNode* current = head;
 //    while (current != NULL) {
@@ -62,17 +62,17 @@
 //    printf("NULL\n");
 //}
 //
-//// ½ºÅÃ Ãâ·Â
+//// ìŠ¤íƒ ì¶œë ¥
 //void printStack(StackNode* top) {
 //    StackNode* current = top;
 //    while (current != NULL) {
-//        printf("½ºÅÃ ³ëµåÀÇ ÇÁ·Î¼¼½º ¸®½ºÆ®: ");
+//        printf("ìŠ¤íƒ ë…¸ë“œì˜ í”„ë¡œì„¸ìŠ¤ ë¦¬ìŠ¤íŠ¸: ");
 //        printProcessList(current->processList);
 //        current = current->next;
 //    }
 //}
 //
-//// ÇÁ·Î¼¼½º ¸®½ºÆ® ¸Ş¸ğ¸® ÇØÁ¦
+//// í”„ë¡œì„¸ìŠ¤ ë¦¬ìŠ¤íŠ¸ ë©”ëª¨ë¦¬ í•´ì œ
 //void freeProcessList(ProcessNode* head) {
 //    ProcessNode* current = head;
 //    while (current != NULL) {
@@ -82,7 +82,7 @@
 //    }
 //}
 //
-//// ½ºÅÃ ¸Ş¸ğ¸® ÇØÁ¦
+//// ìŠ¤íƒ ë©”ëª¨ë¦¬ í•´ì œ
 //void freeStack(StackNode* top) {
 //    StackNode* current = top;
 //    while (current != NULL) {
@@ -95,21 +95,21 @@
 //
 //void dequeue(StackNode** top) {
 //    if (*top == NULL) {
-//        printf("½ºÅÃÀÌ ºñ¾î ÀÖ½À´Ï´Ù.\n");
+//        printf("ìŠ¤íƒì´ ë¹„ì–´ ìˆìŠµë‹ˆë‹¤.\n");
 //        return;
 //    }
-//    // top ½ºÅÃ ³ëµåÀÇ ÇÁ·Î¼¼½º ¸®½ºÆ®ÀÇ Ã¹ ¹øÂ° ³ëµå¸¦ °¡Á®¿È
+//    // top ìŠ¤íƒ ë…¸ë“œì˜ í”„ë¡œì„¸ìŠ¤ ë¦¬ìŠ¤íŠ¸ì˜ ì²« ë²ˆì§¸ ë…¸ë“œ
 //    ProcessNode* head = (*top)->processList;
 //    if (head == NULL) {
-//        printf("ÇÁ·Î¼¼½º ¸®½ºÆ®°¡ ºñ¾î ÀÖ½À´Ï´Ù.\n");
+//        printf("í”„ë¡œì„¸ìŠ¤ ë¦¬ìŠ¤íŠ¸ê°€ ë¹„ì–´ ìˆìŠµë‹ˆë‹¤.\n");
 //        return;
 //    }
-//    // Ã¹ ¹øÂ° ³ëµå »èÁ¦
+//    // ì²« ë²ˆì§¸ ë…¸ë“œ ì‚­ì œ
 //    ProcessNode* temp = head;
 //    (*top)->processList = head->next;
 //    free(temp);
 //
-//    // »èÁ¦ ÈÄ ¸®½ºÆ®°¡ ºñ¾î ÀÖÀ¸¸é ½ºÅÃ¿¡¼­ ÇØ´ç ³ëµå¸¦ Á¦°Å
+//    // ì‚­ì œ í›„ ë¦¬ìŠ¤íŠ¸ê°€ ë¹„ì–´ ìˆìœ¼ë©´ ìŠ¤íƒì—ì„œ í•´ë‹¹ ë…¸ë“œë¥¼ ì œê±°
 //    if ((*top)->processList == NULL) {
 //        StackNode* tempStackNode = *top;
 //        *top = (*top)->next;
@@ -119,37 +119,37 @@
 //
 //void promote(StackNode** top, StackNode* P) {
 //    if (P == NULL || *top == NULL || P->processList == NULL) {
-//        printf("PromotionÀ» ¼öÇàÇÒ ¼ö ¾ø½À´Ï´Ù.\n");
+//        printf("Promotionì„ ìˆ˜í–‰í•  ìˆ˜ ì—†ìŠµë‹ˆë‹¤.\n");
 //        return;
 //    }
 //
-//    // PÀÇ ÇÁ·Î¼¼½º ¸®½ºÆ®¿¡¼­ Ã¹ ¹øÂ° ³ëµå¸¦ Á¦°ÅÇÏ°í ÀúÀå
+//    // Pì˜ í”„ë¡œì„¸ìŠ¤ ë¦¬ìŠ¤íŠ¸ì—ì„œ ì²« ë²ˆì§¸ ë…¸ë“œë¥¼ ì œê±°í•˜ê³  ì €ì¥
 //    ProcessNode* nodeToPromote = P->processList;
 //    P->processList = P->processList->next;
-//    nodeToPromote->next = NULL; // ÀÌµ¿µÉ ³ëµå´Â ´Üµ¶ ³ëµå°¡ µÊ
+//    nodeToPromote->next = NULL; // ì´ë™ë  ë…¸ë“œëŠ” ë‹¨ë… ë…¸ë“œ
 //
-//    // P°¡ ½ºÅÃÀÇ ¸Ç À§ ³ëµå¶ó¸é, ½ºÅÃÀÇ ¸Ç ¾Æ·¡¿¡ Ãß°¡
+//    // Pê°€ ìŠ¤íƒì˜ ë§¨ ìœ„ ë…¸ë“œë¼ë©´, ìŠ¤íƒì˜ ë§¨ ì•„ë˜ì— ì¶”ê°€
 //    if (P->next == NULL) {
 //        StackNode* current = *top;
 //        while (current->next != NULL) {
 //            current = current->next;
 //        }
-//        // »õ ½ºÅÃ ³ëµå »ı¼º ¹× ¿¬°á
+//        // ìƒˆ ìŠ¤íƒ ë…¸ë“œ ìƒì„± ë° ì—°ê²°
 //        StackNode* newStackNode = (StackNode*)malloc(sizeof(StackNode));
 //        newStackNode->processList = nodeToPromote;
 //        newStackNode->next = NULL;
 //        current->next = newStackNode;
 //    }
 //    else {
-//        // P ´ÙÀ½ ½ºÅÃ ³ëµåÀÇ ÇÁ·Î¼¼½º ¸®½ºÆ®ÀÇ ³¡¿¡ Ãß°¡
+//        // P ë‹¤ìŒ ìŠ¤íƒ ë…¸ë“œì˜ í”„ë¡œì„¸ìŠ¤ ë¦¬ìŠ¤íŠ¸ì˜ ëì— ì¶”ê°€
 //        StackNode* nextStackNode = P->next;
 //        ProcessNode* currentProcess = nextStackNode->processList;
 //        if (currentProcess == NULL) {
-//            // ´ÙÀ½ ½ºÅÃ ³ëµåÀÇ ÇÁ·Î¼¼½º ¸®½ºÆ®°¡ ºñ¾î ÀÖ´Ù¸é ¹Ù·Î ¿¬°á
+//            // ë‹¤ìŒ ìŠ¤íƒ ë…¸ë“œì˜ í”„ë¡œì„¸ìŠ¤ ë¦¬ìŠ¤íŠ¸ê°€ ë¹„ì–´ ìˆë‹¤ë©´ ë°”ë¡œ ì—°ê²°
 //            nextStackNode->processList = nodeToPromote;
 //        }
 //        else {
-//            // ÇÁ·Î¼¼½º ¸®½ºÆ®ÀÇ ³¡À» Ã£¾Æ ¿¬°á
+//            // í”„ë¡œì„¸ìŠ¤ ë¦¬ìŠ¤íŠ¸ì˜ ëì„ ì°¾ì•„ ì—°ê²°
 //            while (currentProcess->next != NULL) {
 //                currentProcess = currentProcess->next;
 //            }
@@ -157,14 +157,14 @@
 //        }
 //    }
 //
-//    // ¿ø·¡ ¸®½ºÆ®°¡ ºñ¾î ÀÖÀ¸¸é ½ºÅÃ ³ëµå¸¦ Á¦°Å
+//    // ì›ë˜ ë¦¬ìŠ¤íŠ¸ê°€ ë¹„ì–´ ìˆìœ¼ë©´ ìŠ¤íƒ ë…¸ë“œë¥¼ ì œê±°
 //    if (P->processList == NULL) {
-//        // P°¡ topÀÌ¸é Æ¯º° Ã³¸®
+//        // Pê°€ topì´ë©´ íŠ¹ë³„ ì²˜ë¦¬
 //        if (P == *top) {
 //            *top = P->next;
 //        }
 //        else {
-//            // PÀÇ ÀÌÀü ³ëµå Ã£±â
+//            // Pì˜ ì´ì „ ë…¸ë“œ ì°¾ê¸°
 //            StackNode* prev = *top;
 //            while (prev != NULL && prev->next != P) {
 //                prev = prev->next;
@@ -177,7 +177,7 @@
 //    }
 //}
 //
-//// ÇÁ·Î¼¼½º ¸®½ºÆ®ÀÇ ±æÀÌ¸¦ ¹İÈ¯ÇÏ´Â ÇÔ¼ö
+//// í”„ë¡œì„¸ìŠ¤ ë¦¬ìŠ¤íŠ¸ì˜ ê¸¸ì´ë¥¼ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
 //int processListLength(ProcessNode* head) {
 //    int count = 0;
 //    ProcessNode* current = head;
@@ -188,7 +188,7 @@
 //    return count;
 //}
 //
-//// ½ºÅÃÀÇ ³ëµå ¼ö¸¦ ¹İÈ¯ÇÏ´Â ÇÔ¼ö
+//// ìŠ¤íƒì˜ ë…¸ë“œ ìˆ˜ë¥¼ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
 //int stackNodeCount(StackNode* top) {
 //    int count = 0;
 //    StackNode* current = top;
@@ -199,7 +199,7 @@
 //    return count;
 //}
 //
-//// ÀüÃ¼ ÇÁ·Î¼¼½ºÀÇ °³¼ö¸¦ ¹İÈ¯ÇÏ´Â ÇÔ¼ö
+//// ì „ì²´ í”„ë¡œì„¸ìŠ¤ì˜ ê°œìˆ˜ë¥¼ ë°˜í™˜í•˜ëŠ” í•¨ìˆ˜
 //int totalProcessCount(StackNode* top) {
 //    int total = 0;
 //    StackNode* current = top;
@@ -210,45 +210,45 @@
 //    return total;
 //}
 //
-//// ¸ŞÀÎ ÇÔ¼ö
+//// ë©”ì¸ í•¨ìˆ˜
 //int main() {
 //    StackNode* stack = NULL;
 //
-//    // Ã¹ ¹øÂ° ½ºÅÃ ³ëµå¿¡ ÇÁ·Î¼¼½º ¸®½ºÆ® Ãß°¡
+//    // ì²« ë²ˆì§¸ ìŠ¤íƒ ë…¸ë“œì— í”„ë¡œì„¸ìŠ¤ ë¦¬ìŠ¤íŠ¸ ì¶”ê°€
 //    ProcessNode* processList1 = NULL;
 //    enqueue(&processList1, 1);
 //    enqueue(&processList1, 2);
 //    enqueue(&processList1, 3);
 //    push(&stack, processList1);
 //
-//    // µÎ ¹øÂ° ½ºÅÃ ³ëµå¿¡ ÇÁ·Î¼¼½º ¸®½ºÆ® Ãß°¡
+//    // ë‘ ë²ˆì§¸ ìŠ¤íƒ ë…¸ë“œì— í”„ë¡œì„¸ìŠ¤ ë¦¬ìŠ¤íŠ¸ ì¶”ê°€
 //    ProcessNode* processList2 = NULL;
 //    enqueue(&processList2, 4);
 //    enqueue(&processList2, 5);
 //    push(&stack, processList2);
 //
-//    // ¼¼ ¹øÂ° ½ºÅÃ ³ëµå¿¡ ÇÁ·Î¼¼½º ¸®½ºÆ® Ãß°¡
+//    // ì„¸ ë²ˆì§¸ ìŠ¤íƒ ë…¸ë“œì— í”„ë¡œì„¸ìŠ¤ ë¦¬ìŠ¤íŠ¸ ì¶”ê°€
 //    ProcessNode* processList3 = NULL;
 //    enqueue(&processList3, 6);
 //    enqueue(&processList3, 7);
 //    push(&stack, processList3);
 //
-//    // ½ºÅÃ Ãâ·Â
-//    printf("ÃÊ±â ½ºÅÃ »óÅÂ:\n");
+//    // ìŠ¤íƒ ì¶œë ¥
+//    printf("ì´ˆê¸° ìŠ¤íƒ ìƒíƒœ:\n");
 //    printStack(stack);
 //
-//    // dequeue ÇÔ¼ö È£Ãâ
-//    printf("\nDispatch ÇÁ·Î¼¼½º ½ÇÇà ÈÄ:\n");
+//    // dequeue í•¨ìˆ˜ í˜¸ì¶œ
+//    printf("\nDispatch í”„ë¡œì„¸ìŠ¤ ì‹¤í–‰ í›„:\n");
 //    dequeue(&stack);
 //    printStack(stack);
 //
-//    // promote ÇÔ¼ö È£Ãâ ¿¹½Ã
-//    // ¿©±â¼­´Â P¸¦ µÎ ¹øÂ° ½ºÅÃ ³ëµå·Î ¼³Á¤ÇÏ¿© promote¸¦ ¼öÇàÇÕ´Ï´Ù.
-//    printf("\nPromote ½ÇÇà ÈÄ:\n");
-//    promote(&stack, stack->next); // stack->next´Â µÎ ¹øÂ° ³ëµå¸¦ °¡¸®Åµ´Ï´Ù.
+//    // promote í•¨ìˆ˜ í˜¸ì¶œ ì˜ˆì‹œ
+//    // ì—¬ê¸°ì„œëŠ” Pë¥¼ ë‘ ë²ˆì§¸ ìŠ¤íƒ ë…¸ë“œë¡œ ì„¤ì •í•˜ì—¬ promote
+//    printf("\nPromote ì‹¤í–‰ í›„:\n");
+//    promote(&stack, stack->next); // stack->nextëŠ” ë‘ ë²ˆì§¸ ë…¸ë“œë¥¼ ê°€ë¦¬í‚µë‹ˆë‹¤.
 //    printStack(stack);
 //
-//    // ¸Ş¸ğ¸® ÇØÁ¦
+//    // ë©”ëª¨ë¦¬ í•´ì œ
 //    freeStack(stack);
 //
 //    return 0;
