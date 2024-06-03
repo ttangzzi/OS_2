@@ -245,10 +245,10 @@
 //    // promote 함수 호출 예시
 //    // 여기서는 P를 두 번째 스택 노드로 설정하여 promote
 //    printf("\nPromote 실행 후:\n");
-//    promote(&stack, stack->next); // stack->next는 두 번째 노드를 가리킵니다.
+//    promote(&stack, stack->next);
 //    printStack(stack);
 //
-//    // 메모리 해제
+//    
 //    freeStack(stack);
 //
 //    return 0;
