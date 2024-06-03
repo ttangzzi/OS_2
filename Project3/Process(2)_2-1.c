@@ -14,7 +14,7 @@
 //} StackNode;
 //
 //// 새로운 프로세스 노드를 생성하고 리스트에 추가 (리스트의 끝에 삽입)
-//void insertProcess(ProcessNode** head, int data) {
+//void enqueue(ProcessNode** head, int data) {
 //    ProcessNode* newNode = (ProcessNode*)malloc(sizeof(ProcessNode));
 //    newNode->data = data;
 //    newNode->next = NULL;
@@ -93,7 +93,7 @@
 //    }
 //}
 //
-//void dispatchProcess(StackNode** top) {
+//void dequeue(StackNode** top) {
 //    if (*top == NULL) {
 //        printf("스택이 비어 있습니다.\n");
 //        return;
@@ -210,85 +210,36 @@
 //    return total;
 //}
 //
-//// split_n_merge 함수 구현
-//void split_n_merge(StackNode** top) {
-//    if (*top == NULL) return;
-//
-//    int totalProcesses = totalProcessCount(*top);
-//    int stackNodes = stackNodeCount(*top);
-//    int threshold = totalProcesses / stackNodes;
-//
-//    StackNode* currentStackNode = *top;
-//    while (currentStackNode != NULL) {
-//        int listLength = processListLength(currentStackNode->processList);
-//        // 리스트 길이가 threshold보다 큰 경우 분할 및 병합 수행
-//        if (listLength > threshold) {
-//            ProcessNode* currentProcess = currentStackNode->processList;
-//            ProcessNode* midPrevProcess = NULL;
-//            // 중간 지점 찾기
-//            for (int i = 0; i < 
-//                / 2 - 1; i++) {
-//                currentProcess = currentProcess->next;
-//            }
-//            midPrevProcess = currentProcess;
-//            currentProcess = currentProcess->next; // 중간 지점의 노드
-//            midPrevProcess->next = NULL; // 앞쪽 절반 분리
-//
-//            // 상위 리스트에 병합
-//            if (currentStackNode->next == NULL) { // 최상위 리스트인 경우
-//                push(top, currentProcess); // 새 스택 노드로 추가
-//            }
-//            else {
-//                // 상위 리스트의 끝에 붙임
-//                ProcessNode* tail = currentStackNode->next->processList;
-//                if (tail == NULL) {
-//                    currentStackNode->next->processList = currentProcess;
-//                }
-//                else {
-//                    while (tail->next != NULL) {
-//                        tail = tail->next;
-//                    }
-//                    tail->next = currentProcess;
-//                }
-//            }
-//            // 재귀적으로 threshold 검사 및 분할 병합 수행
-//            split_n_merge(top);
-//            return; // 분할 후에는 더 이상 현재 레벨에서 진행하지 않음
-//        }
-//        currentStackNode = currentStackNode->next;
-//    }
-//}
-//
 //// 메인 함수
 //int main() {
 //    StackNode* stack = NULL;
 //
 //    // 첫 번째 스택 노드에 프로세스 리스트 추가
 //    ProcessNode* processList1 = NULL;
-//    insertProcess(&processList1, 1);
-//    insertProcess(&processList1, 2);
-//    insertProcess(&processList1, 3);
+//    enqueue(&processList1, 1);
+//    enqueue(&processList1, 2);
+//    enqueue(&processList1, 3);
 //    push(&stack, processList1);
 //
 //    // 두 번째 스택 노드에 프로세스 리스트 추가
 //    ProcessNode* processList2 = NULL;
-//    insertProcess(&processList2, 4);
-//    insertProcess(&processList2, 5);
+//    enqueue(&processList2, 4);
+//    enqueue(&processList2, 5);
 //    push(&stack, processList2);
 //
 //    // 세 번째 스택 노드에 프로세스 리스트 추가
 //    ProcessNode* processList3 = NULL;
-//    insertProcess(&processList3, 6);
-//    insertProcess(&processList3, 7);
+//    enqueue(&processList3, 6);
+//    enqueue(&processList3, 7);
 //    push(&stack, processList3);
 //
 //    // 스택 출력
 //    printf("초기 스택 상태:\n");
 //    printStack(stack);
 //
-//    // dispatchProcess 함수 호출
+//    // dequeue 함수 호출
 //    printf("\nDispatch 프로세스 실행 후:\n");
-//    dispatchProcess(&stack);
+//    dequeue(&stack);
 //    printStack(stack);
 //
 //    // promote 함수 호출 예시

@@ -15,16 +15,14 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="2-3.cpp">
+    <ClCompile Include="Process%282%29_2-3.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="FileName.cpp">
+    <ClCompile Include="Process%282%29_2-1.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="commands.txt">
-      <Filter>소스 파일</Filter>
-    </Text>
+    <Text Include="commands.txt" />
   </ItemGroup>
 </Project>
